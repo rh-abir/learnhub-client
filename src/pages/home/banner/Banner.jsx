@@ -1,12 +1,12 @@
 import bannerImg from "../../../assets/banner_img.png";
 const Banner = () => {
   return (
-    <div className="hero">
-      <div className="hero-content flex-col lg:flex-row-reverse">
-        <div className="w-1/2">
+    <div className="hero bg-base-100">
+      <div className="hero-content flex-col-reverse   lg:flex-row-reverse">
+        <div className="lg:w-1/2">
           <img src={bannerImg} className=" rounded-lg  w-full ml-auto" />
         </div>
-        <div className="w-1/2">
+        <div className="lg:w-1/2">
           <h1 className="text-5xl font-bold">
             Learn <span className="text-[#1976D2]">Skills</span> From Our Top
             Instructors
