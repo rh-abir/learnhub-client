@@ -1,6 +1,14 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import avator from "../../../assets/avator.jpg";
+import { AuthContext } from "../../../provider/AuthProvider";
 
 const Header = () => {
+  const { user, logOut } = useContext(AuthContext);
+
+  console.log(user);
+
   const navLink = (
     <>
       <li>
@@ -12,9 +20,20 @@ const Header = () => {
     </>
   );
 
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {
+        // console.log()
+        toast.success("LogOut Successfully !");
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
+
   return (
     <>
-      <div className="navbar bg-base-100 border-0 border-b-2">
+      <div className="navbar bg-base-100  border-b-2 rounded-full">
         <div className="navbar-start">
           <div className="dropdown">
             <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -40,35 +59,56 @@ const Header = () => {
               {navLink}
             </ul>
           </div>
-          <a className="btn btn-ghost text-xl hidden lg:block">LeanHub</a>
+          <Link
+            to="/"
+            className="btn hover:bg-white btn-ghost text-xl hidden lg:block"
+          >
+            LeanHub
+          </Link>
         </div>
         <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">{navLink}</ul>
+          <ul className="menu menu-horizontal px-1 font-bold">{navLink}</ul>
         </div>
+
         <div className="navbar-end">
-          <div className="flex-none gap-2">
-            <div className="dropdown dropdown-end">
-              <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                <div className="w-10 rounded-full">
-                  <img
-                    alt="Tailwind CSS Navbar component"
-                    src="/images/stock/photo-1534528741775-53994a69daeb.jpg"
-                  />
-                </div>
-              </label>
-              <ul
-                tabIndex={0}
-                className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
-              >
-                <li>
-                  <a>Dashboard</a>
-                </li>
-                <li>
-                  <a>Logout</a>
-                </li>
-              </ul>
+          {/* uesr profile */}
+          {!user ? (
+            <button className="btn btn-primary btn-outline">
+              <Link to="/login">Log In</Link>
+            </button>
+          ) : (
+            <div className="flex-none z-10">
+              <div className="dropdown dropdown-end">
+                <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+                  <div className="w-10 rounded-full">
+                    <img src={user ? user?.photoURL : avator} />
+                  </div>
+                </label>
+                <ul
+                  tabIndex={0}
+                  className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+                >
+                  {user && (
+                    <>
+                      <li>
+                        <Link to="/dashboard" className="justify-between">
+                          Dashboard
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          onClick={handleLogOut}
+                          className="justify-between"
+                        >
+                          Log Out
+                        </Link>
+                      </li>
+                    </>
+                  )}
+                </ul>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>
